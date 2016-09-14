@@ -20,17 +20,28 @@ void ofApp::setup(){
 
 void ofApp::setupVideo(){
     scale = ofRandom(2)+1;
-    if(player.isLoaded() && player.isPlaying()){
-        player.stop();
+    if(player.isPlaying()){
+        
         player.close();
     }
-    player.load(files[ofRandom(files.size())].getAbsolutePath());
-    player.play();
+    ofxOMXPlayerSettings settings;
+    settings.videoPath = files[ofRandom(files.size())].getAbsolutePath();
+    settings.useHDMIForAudio = true;    //default true
+    settings.enableTexture = true;      //default true
+    settings.enableLooping = true;      //default true
+    settings.enableAudio = true;        //default true, save resources by disabling
+    //settings.doFlipTexture = true;        //default false
     
-    player.setLoopState(OF_LOOP_NONE);
-    duration = player.getDuration();
     
-    startPoint = ofRandom(duration-60)/duration;
+    //so either pass in the settings
+    player.setup(settings);
+    // player.loadMovie(files[ofRandom(files.size())].getAbsolutePath());
+    // player.play();
+    
+    player.disableLooping();
+    duration = player.getDurationInSeconds();
+    
+    startPoint = ofRandom(duration-60);
     
     drawRect.set(0,0,1920,1080);
     offSetX = ((ofRandomf()*720)-720)*scale;
@@ -42,17 +53,18 @@ void ofApp::setupVideo(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if(player.isLoaded()){
-        if(!isSetPosition && player.getPosition()>0){
+    if(player.getIsOpen()){
+
+        if(!isSetPosition && player.getMediaTime()>0){
             isSetPosition = true;
-            player.setPosition(startPoint);
-            ofLogVerbose() << "position " <<  player.getPosition();
+            player.seekToTimeInSeconds(startPoint);
+            ofLogVerbose() << "position " <<  player.getMediaTime();
         }
-        player.update();
-        float diff = (player.getPosition()-startPoint)*duration;
+        // player.update();
+        float diff = (player.getMediaTime()-startPoint)*duration;
         
         if(diff >60){
-            player.stop();
+            player.close();
         }
     }
 }
@@ -60,7 +72,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(0);
-    if(player.isPlaying()){
+    if(player.getIsOpen()){
         ofPushMatrix();
         ofTranslate(offSetX,offSetY);
         ofScale(scale, scale);
