@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "162860789EF122AF78AB0664CEA97BA6905EA1C2",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "162860789EF122AF78AB0664CEA97BA6905EA1C2" : 9223372036854775807,
+    "09C58EF544F0226C3699BC1BFEBEA0E2D1E961DB" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "E43BE2EB-97C0-4E64-8032-91158F828B08",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "162860789EF122AF78AB0664CEA97BA6905EA1C2" : "UMTPlayer\/",
+    "09C58EF544F0226C3699BC1BFEBEA0E2D1E961DB" : "..\/..\/addons\/ofxOMXPlayer"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "UMTPlayer",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "UMTPlayer.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jvcleave\/ofxOMXPlayer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "09C58EF544F0226C3699BC1BFEBEA0E2D1E961DB"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:fishkingsin\/UMTPlayer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "162860789EF122AF78AB0664CEA97BA6905EA1C2"
+    }
+  ]
+}

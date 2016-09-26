@@ -1,9 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#ifdef TARGET_LINUX_ARM
-#include "ofxOMXPlayer.h"
-#endif
+#define SETTING_PATH "settings.xml"
 class ofApp : public ofBaseApp{
 
 public:
@@ -22,11 +20,8 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
-#ifdef TARGET_LINUX_ARM
-	ofxOMXPlayer player;
-#else
+
 	ofVideoPlayer player;
-#endif
 	ofDirectory dir;
 	vector<ofFile> files;
 	ofRectangle drawRect;
@@ -36,5 +31,9 @@ public:
 	bool isSetPosition;
 
 	void setupVideo();
-
+    string path, fileToPlay;
+    bool isFullScreen;
+    bool isDebug;
+    float speed;
+    
 };

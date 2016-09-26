@@ -1,1 +1,2 @@
 ofxOMXPlayer
+ofxXmlSettings

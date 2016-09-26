@@ -1,11 +1,17 @@
 #include "ofApp.h"
+#include "ofxXmlSettings.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetLogLevel(OF_LOG_VERBOSE);
+    ofxXmlSettings settings;
+    settings.load(SETTING_PATH);
+    path = settings.getValue("SETTINGS:PATH", "");
+    isFullScreen = settings.getValue("SETTINGS:FULLSCREEN", false);
+    isDebug = settings.getValue("SETTINGS:DEBUG", false);
     dir.allowExt("mp4");
     dir.allowExt("mov");
-    int n = dir.listDir("");
+    int n = dir.listDir(path);
     files = dir.getFiles();
     for(int i = 0 ; i < n ; i++ ){
         ofFile file = dir.getFiles()[i];
@@ -15,56 +21,62 @@ void ofApp::setup(){
     }
     
     setupVideo();
-    
 }
 
 void ofApp::setupVideo(){
+    if(files.size()==0){
+        ofLogWarning() << " no more file to play";
+        return;
+    }
+    ofLogVerbose() << "======================== begin setup ========================";
     scale = ofRandom(2)+1;
+    ofLogVerbose() << "scale " << scale;
     if(player.isPlaying()){
         
         player.close();
     }
-    ofxOMXPlayerSettings settings;
-    settings.videoPath = files[ofRandom(files.size())].getAbsolutePath();
-    settings.useHDMIForAudio = true;    //default true
-    settings.enableTexture = true;      //default true
-    settings.enableLooping = true;      //default true
-    settings.enableAudio = true;        //default true, save resources by disabling
-    //settings.doFlipTexture = true;        //default false
+    int index = ofRandom(files.size());
+    fileToPlay = files[index].getAbsolutePath();
+    player.load(fileToPlay);
+    player.play();
+    
+    player.setLoopState(OF_LOOP_NONE);
+    duration = player.getDuration();
+    startPoint = 0;//ofRandom(duration-60)/duration;
     
     
-    //so either pass in the settings
-    player.setup(settings);
-    // player.loadMovie(files[ofRandom(files.size())].getAbsolutePath());
-    // player.play();
+    int newWidth = (int)player.getWidth()*scale;
+    int newHeight = (int)player.getHeight()*scale;
+    int offsetWidth = (int) (((newWidth*1.0f)-ofGetWidth()));
+    int offsetHeight = (int) (((newHeight*1.0f)-ofGetHeight()));
+    offSetX = ofRandom(-offsetWidth,0);
+    offSetY = ofRandom(-offsetHeight,0);
     
-    player.disableLooping();
-    duration = player.getDurationInSeconds();
+    ofLogVerbose() << "offSetX " << offSetX << endl
+    << "offSetY " << offSetY << endl
+    << "newWidth " << newHeight << endl
+    << "newHeight " << newHeight << endl;
     
-    startPoint = ofRandom(duration-60);
-    
-    drawRect.set(0,0,1920,1080);
-    offSetX = ((ofRandomf()*720)-720)*scale;
-    offSetY = ((ofRandomf()*540)-540)*scale;
+    drawRect.set(offSetX, offSetY, newWidth, newHeight);
     ofLogVerbose() << "duration " <<  duration;
     ofLogVerbose() << "startPoint " <<  startPoint;
+    speed = duration/120;
+    ofLogVerbose() << "speed " <<  speed;
+    player.setSpeed(speed);
     isSetPosition = false;
+    
+    files.erase(files.begin()+index);
+    ofLogVerbose() << "======================== end setup ========================";
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    if(player.getIsOpen()){
-
-        if(!isSetPosition && player.getMediaTime()>0){
-            isSetPosition = true;
-            player.seekToTimeInSeconds(startPoint);
-            ofLogVerbose() << "position " <<  player.getMediaTime();
-        }
-        // player.update();
-        float diff = (player.getMediaTime()-startPoint)*duration;
+    
+    if(player.isLoaded()){
         
-        if(diff >60){
-            player.close();
+        player.update();
+        if(player.isPaused()){
+            setupVideo();
         }
     }
 }
@@ -72,13 +84,25 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ofBackground(0);
-    if(player.getIsOpen()){
+    ofSetColor(255);
+    if(player.isLoaded()){
         ofPushMatrix();
-        ofTranslate(offSetX,offSetY);
-        ofScale(scale, scale);
-        
         player.draw(drawRect);
         ofPopMatrix();
+    }
+    
+    if(isDebug){
+        ofSetColor(0, 0, 0,100);
+        ofDrawRectangle(0, 0, 200, 100);
+        ofSetColor(255);
+        ostringstream debugInfo;
+        debugInfo << "poatiion "<<player.getPosition()*duration << endl;
+        debugInfo << "duration " <<duration << endl;
+        debugInfo << "speed " << speed << endl;
+        debugInfo << "scale " << scale << endl;
+        debugInfo << "draw rect " << drawRect << endl;
+        ofDrawBitmapString(debugInfo.str(), 20, 20);
+        
     }
 }
 
@@ -88,6 +112,22 @@ void ofApp::keyPressed(int key){
         case ' ':
             setupVideo();
             break;
+        case 's':{
+            ofxXmlSettings settings;
+            settings.load(SETTING_PATH);
+            settings.setValue("SETTINGS:FULLSCREEN", isFullScreen);
+            settings.setValue("SETTINGS:DEBUG", isDebug);
+            settings.save(SETTING_PATH);
+        }
+            break;
+        case OF_KEY_TAB:
+            isDebug = !isDebug;
+            break;
+        case 'f':
+            isFullScreen = !isFullScreen;
+            ofSetFullscreen(isFullScreen);
+            break;
+            
     }
 }
 
@@ -138,5 +178,25 @@ void ofApp::gotMessage(ofMessage msg){
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
+    
+    path = dragInfo.files.at(0);
+    dir.allowExt("mp4");
+    dir.allowExt("mov");
+    int n = dir.listDir(path);
+    files = dir.getFiles();
+    for(int i = 0 ; i < n ; i++ ){
+        ofFile file = dir.getFiles()[i];
+        
+        ofLogVerbose() << file.getAbsolutePath();
+        
+    }
+    
+    ofxXmlSettings settings;
+    settings.load(SETTING_PATH);
+    //    path = settings.getValue("SETTINGS:PATH", "");
+    settings.setValue("SETTINGS:PATH", path);
+    settings.save(SETTING_PATH);
+    
+    setupVideo();
     
 }
