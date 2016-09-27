@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #define SETTING_PATH "settings.xml"
+#include "MyVideoPlayer.h"
 class ofApp : public ofBaseApp{
 
 public:
@@ -21,7 +22,7 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	ofVideoPlayer player;
+	MyVideoPlayer player;
 	ofDirectory dir;
 	vector<ofFile> files;
 	ofRectangle drawRect;

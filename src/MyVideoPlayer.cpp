@@ -6,7 +6,7 @@
 //
 //
 
-#include "MyVideoPlayer.hpp"
+#include "MyVideoPlayer.h"
 //needs implementing
 bool MyVideoPlayer::load(string name) {
 #ifdef TARGET_LINUX_ARM
