@@ -76,12 +76,14 @@ public:
     
     bool isPaused(){
 #ifdef TARGET_LINUX_ARM
+        return omxPlayer.isPaused();
 #else
         return player.isPaused();
 #endif
     };
     bool				isLoaded(){
 #ifdef TARGET_LINUX_ARM
+        return omxPlayer.isLoad();
 #else
         return player.isLoaded();
 #endif
