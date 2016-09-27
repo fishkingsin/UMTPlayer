@@ -12,55 +12,168 @@
 #include <stdio.h>
 #include "ofMain.h"
 #ifdef TARGET_LINUX_ARM
-#includde "ofxOMXPlayer.h"
+#include "ofxOMXPlayer.h"
 #endif
-class MyVideoPlayer : public ofBaseVideoPlayer{
+class MyVideoPlayer {
 public:
     
     //needs implementing
-    bool				load(string name) {return false;};
-    void				loadAsync(string name){};
+    bool				load(string name) {
+#ifdef TARGET_LINUX_ARM
+        ofxOMXPlayerSettings settings;
+        settings.videoPath = name;
+        settings.useHDMIForAudio	= true;		//default true
+        settings.enableTexture		= true;		//default true
+        settings.enableLooping		= true;		//default true
+        settings.enableAudio		= true;		//default true, save resources by disabling
+        //settings.doFlipTexture = true;		//default false
+        
+        if (!settings.enableTexture)
+        {
+            /*
+             We have the option to pass in a rectangle
+             to be used for a non-textured player to use (as opposed to the default full screen)
+             */
+            settings.displayRect.width = 400;
+            settings.displayRect.height = 300;
+            settings.displayRect.x = 440;
+            settings.displayRect.y = 200;
+        }
+        
+        
+        //so either pass in the settings
+        omxPlayer.setup(settings);
+#else
+        player.load(name);
+#endif
+    };
+    void loadAsync(string name){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.loadAsync(name);
+#endif
+    };
     
-    void				play(){};
-    void				stop(){};
-    ofTexture *			getTexturePtr(){return NULL;};
+    void play(){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.play();
+#endif
+    };
+    void stop(){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.stop();
+#endif
+    };
     
-    float 				getWidth(){return 0;};
-    float 				getHeight(){return 0;};
     
-    bool				isPaused(){return false;};
-    bool				isLoaded(){return false;};
-    bool				isPlaying(){return false;};
-    bool				isInitialized(){return false;};
+    
+    bool isPaused(){
+#ifdef TARGET_LINUX_ARM
+#else
+        return player.isPaused();
+#endif
+    };
+    bool				isLoaded(){
+#ifdef TARGET_LINUX_ARM
+#else
+        return player.isLoaded();
+#endif
+    };
+    bool				isPlaying(){
+#ifdef TARGET_LINUX_ARM
+        return omxPlayer.isPlaying();
+#else
+        return player.isPlaying();
+#endif
+    };
+    
     
     //should implement!
-    float 				getPosition(){return 0;};
-    float 				getSpeed(){return 0;};
-    float 				getDuration(){return 0;};
-    bool				getIsMovieDone(){return 0;};
-    
-    void 				setLoopState(ofLoopType state){};
-    void   				setSpeed(float speed){};
-    
-    
-    void				setFrame(int frame){};  // frame 0 = first frame...
-    
-    int					getCurrentFrame(){return 0;};
-    int					getTotalNumFrames(){return 0;};
-    ofLoopType			getLoopState(){return OF_LOOP_NONE;};
-    
-    void				firstFrame(){};
-    void				nextFrame(){};
-    void				previousFrame(){};
-    
-    bool isFrameNew(){return 0;};
-    void close(){};
-    
-    bool setPixelFormat(ofPixelFormat pixelFormat){return false;};
-
-    ofPixelFormat getPixelFormat(){return OF_PIXELS_RGB;};
+    float 				getPosition(){
 #ifdef TARGET_LINUX_ARM
-    ofxOMXPlayer player;
+        return omxPlayer.getMediaTime();
+#else
+        return player.getPosition();
+#endif
+    };
+    
+    float getDuration(){
+#ifdef TARGET_LINUX_ARM
+        return omxPlayer.getDurationInSeconds();
+#else
+        return player.getDuration();
+#endif
+    };
+    bool				getIsMovieDone(){
+#ifdef TARGET_LINUX_ARM
+#else
+        return player.getIsMovieDone();
+#endif
+    };
+    
+    void 				setLoopState(ofLoopType state){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.setLoopState(state);
+#endif
+    };
+    void   				setSpeed(float speed){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.setSpeed(speed);
+#endif
+    };
+    
+    float getWidth(){
+#ifdef TARGET_LINUX_ARM
+        return omxPlayer.getWidth();
+#else
+        return player.getWidth();
+#endif
+    };
+    
+    float getHeight(){
+#ifdef TARGET_LINUX_ARM
+#else
+        return player.getHeight();
+#endif
+    };
+    
+    bool isFrameNew(){
+#ifdef TARGET_LINUX_ARM
+        omxPlayer.isFrameNew();
+#else
+        return player.isFrameNew();
+#endif
+    };
+    void close(){
+#ifdef TARGET_LINUX_ARM
+        omxPlayer.close();
+#else
+        player.close();
+#endif
+    };
+    
+    void draw(ofRectangle rect){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.draw(rect);
+#endif
+    };
+    
+    
+    void update(){
+#ifdef TARGET_LINUX_ARM
+#else
+        player.update();
+#endif
+    };
+    
+    
+#ifdef TARGET_LINUX_ARM
+    ofxOMXPlayer omxPlayer;
 #else
     ofVideoPlayer player;
 #endif
