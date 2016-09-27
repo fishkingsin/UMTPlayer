@@ -14,12 +14,17 @@
 #ifdef TARGET_LINUX_ARM
 #include "ofxOMXPlayer.h"
 #endif
+#ifdef TAGER_LINUX_ARM
+class MyVideoPlayer : public ofxOMXPlayerListener{
+#else
 class MyVideoPlayer {
+#endif
 public:
     
     //needs implementing
     bool				load(string name) {
 #ifdef TARGET_LINUX_ARM
+        isVideoEnd = false;
         ofxOMXPlayerSettings settings;
         settings.videoPath = name;
         settings.useHDMIForAudio	= true;		//default true
@@ -27,7 +32,7 @@ public:
         settings.enableLooping		= true;		//default true
         settings.enableAudio		= true;		//default true, save resources by disabling
         //settings.doFlipTexture = true;		//default false
-        
+        settings.listener = this;
         if (!settings.enableTexture)
         {
             /*
@@ -108,6 +113,7 @@ public:
     };
     bool				getIsMovieDone(){
 #ifdef TARGET_LINUX_ARM
+        return isVideoEnd;
 #else
         return player.getIsMovieDone();
 #endif
@@ -174,6 +180,13 @@ public:
     
 #ifdef TARGET_LINUX_ARM
     ofxOMXPlayer omxPlayer;
+    bool isVideoEnd ;
+    void onVideoEnd(ofxOMXPlayerListenerEventData& e) {
+        isVideoEnd = true;
+    }
+    void onVideoLoop(ofxOMXPlayerListenerEventData& e) {
+        
+    }
 #else
     ofVideoPlayer player;
 #endif
