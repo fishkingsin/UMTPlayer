@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "ofMain.h"
 #ifdef TARGET_LINUX_ARM
-#include "ofxOMXPlayer.h"
+#include "ofRPIVideoPlayer.h"
 #endif
 class MyVideoPlayer {
 
