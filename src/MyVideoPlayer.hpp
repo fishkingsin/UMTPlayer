@@ -33,18 +33,6 @@ public:
         settings.enableAudio		= true;		//default true, save resources by disabling
         //settings.doFlipTexture = true;		//default false
         settings.listener = this;
-        if (!settings.enableTexture)
-        {
-            /*
-             We have the option to pass in a rectangle
-             to be used for a non-textured player to use (as opposed to the default full screen)
-             */
-            settings.displayRect.width = 400;
-            settings.displayRect.height = 300;
-            settings.displayRect.x = 440;
-            settings.displayRect.y = 200;
-        }
-        
         
         //so either pass in the settings
         omxPlayer.setup(settings);
