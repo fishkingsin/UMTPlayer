@@ -14,11 +14,8 @@
 #ifdef TARGET_LINUX_ARM
 #include "ofxOMXPlayer.h"
 #endif
-#ifdef TAGER_LINUX_ARM
-class MyVideoPlayer : public ofxOMXPlayerListener{
-#else
 class MyVideoPlayer {
-#endif
+
 public:
     
     
@@ -60,14 +57,7 @@ public:
     
     
 #ifdef TARGET_LINUX_ARM
-    ofxOMXPlayer omxPlayer;
-    bool isVideoEnd ;
-    void onVideoEnd(ofxOMXPlayerListenerEventData& e) {
-        isVideoEnd = true;
-    }
-    void onVideoLoop(ofxOMXPlayerListenerEventData& e) {
-        
-    }
+    ofRPIVideoPlayer player;
 #else
     ofVideoPlayer player;
 #endif
