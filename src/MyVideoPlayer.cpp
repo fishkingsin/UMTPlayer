@@ -66,7 +66,7 @@ void MyVideoPlayer::close(){
 }
 
 void MyVideoPlayer::draw(ofRectangle rect){
-    player.draw(rect);
+    player.draw(rect.x, rect.y, rect.width, rect.height);
 }
 
 
