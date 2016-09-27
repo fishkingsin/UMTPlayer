@@ -21,152 +21,42 @@ class MyVideoPlayer {
 #endif
 public:
     
-    //needs implementing
-    bool				load(string name) {
-#ifdef TARGET_LINUX_ARM
-        isVideoEnd = false;
-        ofxOMXPlayerSettings settings;
-        settings.videoPath = name;
-        settings.useHDMIForAudio	= true;		//default true
-        settings.enableTexture		= true;		//default true
-        settings.enableLooping		= true;		//default true
-        settings.enableAudio		= true;		//default true, save resources by disabling
-        //settings.doFlipTexture = true;		//default false
-        settings.listener = this;
-        
-        //so either pass in the settings
-        omxPlayer.setup(settings);
-#else
-        player.load(name);
-#endif
-    };
-    void loadAsync(string name){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.loadAsync(name);
-#endif
-    };
     
-    void play(){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.play();
-#endif
-    };
-    void stop(){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.stop();
-#endif
-    };
+    bool load(string name);
     
+    void loadAsync(string name);
     
+    void play();
     
-    bool isPaused(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.isPaused();
-#else
-        return player.isPaused();
-#endif
-    };
-    bool				isLoaded(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.isLoad();
-#else
-        return player.isLoaded();
-#endif
-    };
-    bool				isPlaying(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.isPlaying();
-#else
-        return player.isPlaying();
-#endif
-    };
+    void stop();
     
+    bool isPaused();
     
-    //should implement!
-    float 				getPosition(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.getMediaTime();
-#else
-        return player.getPosition();
-#endif
-    };
+    bool	 isLoaded();
     
-    float getDuration(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.getDurationInSeconds();
-#else
-        return player.getDuration();
-#endif
-    };
-    bool				getIsMovieDone(){
-#ifdef TARGET_LINUX_ARM
-        return isVideoEnd;
-#else
-        return player.getIsMovieDone();
-#endif
-    };
+    bool	 isPlaying();
     
-    void 				setLoopState(ofLoopType state){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.setLoopState(state);
-#endif
-    };
-    void   				setSpeed(float speed){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.setSpeed(speed);
-#endif
-    };
+    float getPosition();
     
-    float getWidth(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.getWidth();
-#else
-        return player.getWidth();
-#endif
-    };
+    float getDuration();
     
-    float getHeight(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.getHeight();
-#else
-        return player.getHeight();
-#endif
-    };
+    bool getIsMovieDone();
     
-    bool isFrameNew(){
-#ifdef TARGET_LINUX_ARM
-        return omxPlayer.isFrameNew();
-#else
-        return player.isFrameNew();
-#endif
-    };
-    void close(){
-#ifdef TARGET_LINUX_ARM
-        omxPlayer.close();
-#else
-        player.close();
-#endif
-    };
+    void setLoopState(ofLoopType state);
     
-    void draw(ofRectangle rect){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.draw(rect);
-#endif
-    };
+    void setSpeed(float speed);
     
+    float getWidth();
     
-    void update(){
-#ifdef TARGET_LINUX_ARM
-#else
-        player.update();
-#endif
-    };
+    float getHeight();
+    
+    bool isFrameNew();
+    
+    void close();
+    
+    void draw(ofRectangle rect);
+    
+    void update();
     
     
 #ifdef TARGET_LINUX_ARM
