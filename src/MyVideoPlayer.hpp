@@ -132,6 +132,7 @@ public:
     
     float getHeight(){
 #ifdef TARGET_LINUX_ARM
+        return omxPlayer.getHeight();
 #else
         return player.getHeight();
 #endif
@@ -139,7 +140,7 @@ public:
     
     bool isFrameNew(){
 #ifdef TARGET_LINUX_ARM
-        omxPlayer.isFrameNew();
+        return omxPlayer.isFrameNew();
 #else
         return player.isFrameNew();
 #endif
