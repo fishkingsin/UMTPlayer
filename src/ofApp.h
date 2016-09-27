@@ -27,7 +27,7 @@ public:
 	ofRectangle drawRect;
 	float scale ,offSetX,offSetY;
 
-	float startPoint,duration;
+	float startPoint,duration,max_scale;
 	bool isSetPosition;
 
 	void setupVideo();
