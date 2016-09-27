@@ -9,7 +9,12 @@
 #include "MyVideoPlayer.h"
 //needs implementing
 bool MyVideoPlayer::load(string name) {
+#ifdef TARGET_LINUX_ARM
+    player.enablePixels(); 
+#endif
     player.load(name);
+
+    
 }
 void MyVideoPlayer::loadAsync(string name){
     player.loadAsync(name);
