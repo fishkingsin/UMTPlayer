@@ -9,6 +9,7 @@ void ofApp::setup(){
     path = settings.getValue("SETTINGS:PATH", "");
     isFullScreen = settings.getValue("SETTINGS:FULLSCREEN", false);
     isDebug = settings.getValue("SETTINGS:DEBUG", false);
+    max_scale = settings.getValue("SETTINGS:MAX_SCALE", 2);
     dir.allowExt("mp4");
     dir.allowExt("mov");
     int n = dir.listDir(path);
@@ -29,7 +30,7 @@ void ofApp::setupVideo(){
         return;
     }
     ofLogVerbose() << "======================== begin setup ========================";
-    scale = ofRandom(2)+1;
+    scale = ofRandom(max_scale)+1;
     ofLogVerbose() << "scale " << scale;
     if(player.isPlaying()){
         
@@ -75,7 +76,7 @@ void ofApp::update(){
     if(player.isLoaded()){
         
         player.update();
-        if(player.isPaused()){
+        if(player.getIsMovieDone()){
             setupVideo();
         }
     }
