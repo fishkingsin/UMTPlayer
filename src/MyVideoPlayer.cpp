@@ -10,7 +10,7 @@
 //needs implementing
 bool MyVideoPlayer::load(string name) {
 #ifdef TARGET_LINUX_ARM
-    player.enablePixels(); 
+//    player.enablePixels(); 
 #endif
     player.load(name);
 

@@ -97,9 +97,9 @@ void ofApp::draw(){
         ofDrawRectangle(0, 0, 200, 100);
         ofSetColor(255);
         ostringstream debugInfo;
-        debugInfo << "poatiion "<<player.getPosition()*duration << endl;
-        debugInfo << "duration " <<duration << endl;
-        debugInfo << "speed " << speed << endl;
+//        debugInfo << "poatiion "<<player.getPosition()*duration << endl;
+//        debugInfo << "duration " <<duration << endl;
+//        debugInfo << "speed " << speed << endl;
         debugInfo << "scale " << scale << endl;
         debugInfo << "draw rect " << drawRect << endl;
         ofDrawBitmapString(debugInfo.str(), 20, 20);
